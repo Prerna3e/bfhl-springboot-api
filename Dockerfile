@@ -1,12 +1,18 @@
-
+# -------- STAGE 1: Build the JAR --------
 FROM eclipse-temurin:17-jdk AS build
 
 WORKDIR /app
 
+# Install Maven inside the container
+RUN apt-get update && apt-get install -y maven
+
+# Copy project files
 COPY . .
 
-RUN ./mvnw clean package -DskipTests
+# Build the application
+RUN mvn clean package -DskipTests
 
+# -------- STAGE 2: Run the app --------
 FROM eclipse-temurin:17-jre
 
 WORKDIR /app
